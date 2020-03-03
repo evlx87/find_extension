@@ -1,0 +1,8 @@
+.jpg
+.xls
+.xlsx
+.pdf
+.jpeg
+.doc
+.docx
+.zip
