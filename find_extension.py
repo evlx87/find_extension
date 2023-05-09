@@ -5,24 +5,19 @@ import re
 
 def find_ext(input_file):
     """Функция поиска расширений в лог-файле"""
-    dir_log = open(input_file, mode='r', encoding='utf8')
+    with open(input_file, mode='r', encoding='utf8') as dir_log:
+        extensions = set()  # множество для хранения найденных расширений
 
-    mid_list = []  # Переменная для хранения промежуточных значений
+        for line in dir_log:
+            extensions.update(re.findall(r'\.[a-zA-Z]{2,5}', line))
 
-    for line in dir_log:
-        match = re.findall(r'\.[a-zA-Z]{2,5}', line)
-        if match not in mid_list:
-            mid_list.append(match)
+        # сортировка расширений и запись в файл вывода
+        filename = f"output/sort_list_{time.strftime('%Y_%m_%d_%H_%M_%S')}.txt"
+        with open(filename, 'tw') as sort_list:
+            for extension in sorted(extensions):
+                sort_list.write(extension[1:] + '\n')  # удаляем точку и записываем в файл
 
-    sort_list = open('output/sort_list_' +
-                     str(time.strftime("%Y_%m_%d_%H_%M_%S")) +
-                     '.txt', 'tw')
-    for element in mid_list:
-        sort_list.writelines(set(element))
-        sort_list.write('\n')
-
-    dir_log.close()
-    sort_list.close()
+    print(f"Результат записан в файл {filename}")
 
 
 find_ext('input/dir_log.txt')
